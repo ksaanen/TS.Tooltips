@@ -1,0 +1,16 @@
+{
+  "name": "Tooltips",
+  "version": "1.0.0",
+  "description": "Standalone tooltips script",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc -w",
+    "build": "tsc -b"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.6.4"
+  }
+}

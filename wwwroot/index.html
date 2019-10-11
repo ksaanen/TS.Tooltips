@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tooltips</title>
+</head>
+<body>
+  
+  <script src="../dist/tooltips.js"></script>
+  
+  <script>
+    function Tooltips() {
+      this.tooltips.add([
+        {content: 'c1', header: 'h1', refElement: '.tooltip-el-01'},
+        {content: 'c2', header: 'h2', refElement: '.tooltip-el-02'},
+        {content: 'c3', header: 'h3', refElement: '.tooltip-el-03'},
+        {content: 'c4', header: 'h4', refElement: '.tooltip-el-04'}
+      ]);
+
+      this.tooltips.init();
+    }
+    Tooltips();
+  </script>
+</body>
+</html>
