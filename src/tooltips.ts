@@ -29,7 +29,7 @@ namespace SomeNamespace.Vanilla.Core {
     }
 
     init() {
-         
+      
       // Add resize eventlistener to window
       window.addEventListener('resize', (e) => {
         this.onResize();
