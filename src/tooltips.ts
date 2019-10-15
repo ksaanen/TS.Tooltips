@@ -1,14 +1,22 @@
 namespace SomeNamespace.Vanilla.Core {
 
-  export class Tooltip {
+  export interface TooltipInterface {
     header: string;
     content: string;
     refElement: string;
-    
+    isOpen?: boolean;
+  }
+
+  export class Tooltip {
+   
     private _isOpen: boolean;
     private _ref: HTMLElement;
+    private _header: string;
+    private _content: string;
+
+    private tooltip: HTMLElement;
     
-    constructor(tooltip: Tooltip) {
+    constructor(tooltip: TooltipInterface) {
       this.ref = document.querySelector(tooltip.refElement);
 
       this.ref.onclick = () => {
@@ -16,8 +24,12 @@ namespace SomeNamespace.Vanilla.Core {
       };
     }
 
-    positionTooltip() {
-      console.log('bla', this.ref);
+    setPosition() {
+
+    }
+
+    private close() {
+      this.tooltip.remove();
     }
 
     private onClick() {
@@ -25,27 +37,35 @@ namespace SomeNamespace.Vanilla.Core {
       if (!this.isOpen) {
         this.isOpen = true;
       }
-
-      this.show();
     }
 
-    private show() {
+    private open() {
       let el = document.createElement('div');
       el.classList.add('tooltip');
       el.innerHTML = `
         <div class="header">${this.header}</div>
         <div class="content">${this.content}</div>
       `;
-      return el;
+      
+      // Generate tooltip
+      this.tooltip = el;
+      document.body.append(this.tooltip);
+      console.log('open');
     }
 
-    
     get isOpen(): boolean {
       return this._isOpen;
     }
 
     set isOpen(bool: boolean) {
       this._isOpen = bool;
+
+      if (bool === true) {
+        this.open();
+      }
+      else {
+        this.close();
+      }
     }
 
     get ref(): HTMLElement {
@@ -54,6 +74,22 @@ namespace SomeNamespace.Vanilla.Core {
 
     set ref(el: HTMLElement) {
       this._ref = el;
+    }
+
+    get header(): string {
+      return this._header;
+    }
+
+    set header(str: string) {
+      this._header = str;
+    }
+
+    get content(): string {
+      return this._content;
+    }
+
+    set content(str: string) {
+      this._content = str;
     }
 
   }
@@ -67,16 +103,19 @@ namespace SomeNamespace.Vanilla.Core {
     }
 
     // Accept a Tooltip object or an array of Tooltip objects
-    addTooltip(tooltip: Tooltip) {
+    addTooltip(tooltip: TooltipInterface) {
       let t = new Tooltip(tooltip);
       this.tooltips.push(t);
     }
 
     private init() {
-
       // Add resize eventlistener to window
       window.addEventListener('resize', (e) => {
         this.onResize();
+      });
+
+      window.addEventListener('click', (e) => {
+        this.onOutsideClick();
       });
     }
 
@@ -87,10 +126,16 @@ namespace SomeNamespace.Vanilla.Core {
       })[0];
     }
 
+    private onOutsideClick() {
+      if (this.getOpenTooltip()) {
+        this.getOpenTooltip().isOpen = false;
+      }
+    }
+
     private onResize() {
       // First check if a tooltip has opened.
       if (this.getOpenTooltip()) {
-        this.getOpenTooltip().positionTooltip();
+        this.getOpenTooltip().setPosition();
       }
     }
 
