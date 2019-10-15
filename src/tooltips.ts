@@ -25,32 +25,41 @@ namespace SomeNamespace.Vanilla.Core {
     }
 
     setPosition() {
-
+      let ref = this.ref.getBoundingClientRect();
+      this.tooltip.style.left = ref.left + 'px';
+      this.tooltip.style.top = (ref.top + ref.height + 10) + 'px';
     }
 
     private close() {
       this.tooltip.remove();
+      console.log(this.isOpen);
     }
 
     private onClick() {
       // Set isOpen
       if (!this.isOpen) {
         this.isOpen = true;
+        this.setPosition();
       }
     }
 
     private open() {
       let el = document.createElement('div');
-      el.classList.add('tooltip');
-      el.innerHTML = `
-        <div class="header">${this.header}</div>
-        <div class="content">${this.content}</div>
-      `;
+      el.className = 'tooltip';
+      let html = `<div class="tooltip--close" onclick="this.parentNode.remove()"></div>`;
       
+      if (this.header !== '') {
+        html += `<div class="tooltip--header">${this.header}</div>`;
+      }
+      if (this.content !== '') {
+        html += `<div class="tooltip--content">${this.content}</div>`;
+      }
+
+      el.innerHTML = html;
+
       // Generate tooltip
       this.tooltip = el;
-      document.body.append(this.tooltip);
-      console.log('open');
+      document.querySelector('body').appendChild(this.tooltip);
     }
 
     get isOpen(): boolean {
@@ -113,10 +122,6 @@ namespace SomeNamespace.Vanilla.Core {
       window.addEventListener('resize', (e) => {
         this.onResize();
       });
-
-      window.addEventListener('click', (e) => {
-        this.onOutsideClick();
-      });
     }
 
     private getOpenTooltip(): Tooltip {
@@ -124,12 +129,6 @@ namespace SomeNamespace.Vanilla.Core {
       return this.tooltips.filter(function (tooltip) {
         return tooltip.isOpen === true;
       })[0];
-    }
-
-    private onOutsideClick() {
-      if (this.getOpenTooltip()) {
-        this.getOpenTooltip().isOpen = false;
-      }
     }
 
     private onResize() {
