@@ -7,23 +7,27 @@
   <title>Tooltips</title>
 </head>
 <body>
+
+  <div class="targets">
+
+    <div class="tooltip-el-01">click 1</div>
+    <div class="tooltip-el-02">click 2</div>
+    <div class="tooltip-el-03">click 3</div>
+    <div class="tooltip-el-04">click 4</div>
+    <div class="tooltip-el-05">click 5</div>
+  </div>
   
   <script src="../dist/tooltips.js" type="text/javascript"></script>
   
   <script type="text/javascript">
-    let tooltips = new SomeNamespace.Vanilla.Core.Tooltips();
 
-    function Tooltips() {
-      tooltips.add([
-        {content: 'c1', header: 'h1', refElement: '.tooltip-el-01'},
-        {content: 'c2', header: 'h1', refElement: '.tooltip-el-02'},
-        {content: 'c3', header: 'h1', refElement: '.tooltip-el-03'},
-        {content: 'c4', header: 'h1', refElement: '.tooltip-el-04'},
-        {content: 'c5', header: 'h1', refElement: '.tooltip-el-05'}
-      ]);
-      tooltips.init();
-    }
-    Tooltips();
+    let tooltips = new SomeNamespace.Vanilla.Core.Tooltips();
+    tooltips.addTooltip({content: 'c1', header: 'h1', refElement: '.tooltip-el-01'});
+    tooltips.addTooltip({content: 'c2', header: 'h2', refElement: '.tooltip-el-02'});
+    tooltips.addTooltip({content: 'c3', header: 'h3', refElement: '.tooltip-el-03'});
+    tooltips.addTooltip({content: 'c4', header: 'h4', refElement: '.tooltip-el-04'});
+    tooltips.addTooltip({content: 'c5', header: 'h5', refElement: '.tooltip-el-05'});
+
   </script>
 </body>
 </html>
