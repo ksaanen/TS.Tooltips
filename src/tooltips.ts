@@ -15,7 +15,7 @@ namespace SomeNamespace.Vanilla.Core {
     private header: string;
     private content: string;
     private tooltipEl: HTMLElement;
-    
+
     constructor(tooltip: TooltipInterface) {
       this.ref = document.querySelector(tooltip.refElement);
       if (tooltip.header) {
@@ -67,10 +67,6 @@ namespace SomeNamespace.Vanilla.Core {
       }
     }
 
-    private onClickOutside(event: Event) {
-      // TODO: clickoutside event listener
-    }
-
     private togglePositionClass(position: 'left'|'right'|'auto'): void {
       this.tooltipEl.classList.remove(
         'tooltip--position-auto',
@@ -81,7 +77,6 @@ namespace SomeNamespace.Vanilla.Core {
     };
 
     private create(): void {
-
       // Tooltip instance
       let tt = this;
 
@@ -94,7 +89,7 @@ namespace SomeNamespace.Vanilla.Core {
       let closeBtn = document.createElement('div');
       closeBtn.className = 'tooltip--close';
       closeBtn.innerHTML = closeBtnSVG;
-      closeBtn.addEventListener('click', function() {
+      closeBtn.addEventListener('click', (event) => {
         tt.isOpen = false;
       });
       this.tooltipEl.appendChild(closeBtn);
@@ -111,12 +106,22 @@ namespace SomeNamespace.Vanilla.Core {
         contentEl.innerText = this.content;
         this.tooltipEl.appendChild(contentEl);
       }
+
       document.querySelector('body').appendChild(this.tooltipEl);
 
-      window.addEventListener('click', function(event) {
-        tt.onClickOutside(event);
-      });
+      setTimeout(function(){
+        tt.onClickOutsideHandler();
+      }, 100);
 
+    }
+
+    private onClickOutsideHandler() {
+      document.addEventListener('click', (event) => {
+        // Close tooltip on click outside
+        if (event.target instanceof Node && !this.tooltipEl.contains(event.target)) {
+          this.isOpen = false;
+        }
+      });
     }
 
     get isOpen(): boolean {
@@ -152,14 +157,14 @@ namespace SomeNamespace.Vanilla.Core {
 
     private init(): void {
       // Add resize eventlistener to window
-      window.addEventListener('resize', (e) => {
+      window.addEventListener('resize', (event) => {
         this.onResize();
       });
     }
 
     private getOpenTooltip(): Tooltip {
       // Returns first found open tooltip (tooltips are expected to have 1 open at a time).
-      return this.tooltips.filter(function (tooltip) {
+      return this.tooltips.filter((tooltip) => {
         return tooltip.isOpen === true;
       })[0];
     }
