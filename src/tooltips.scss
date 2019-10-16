@@ -49,23 +49,21 @@
     left: auto;
     right: 0;
   }
+  
   &.tooltip--position-left:before {
     margin: 0 0 0 3px;
     right: auto;
     left: 0;
   }
-}
 
-@media screen and (max-width: 320px) {
-
-  .tooltip {
+  &.tooltip--position-auto {
     width: auto;
     left: 15px !important;
     right: 15px !important;
 
+    // Hide arrow
     &:before {
       display: none;
     }
   }
-
 }

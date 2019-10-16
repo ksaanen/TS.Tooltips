@@ -37,14 +37,26 @@ namespace SomeNamespace.Vanilla.Core {
       this.tooltipEl.style.top = (ref.top + ref.height + 10) + 'px';
 
       if (ref.left + ref.width + this.tooltipEl.offsetWidth > window.innerWidth) {
-        // Align right
-        this.tooltipEl.classList.remove('tooltip--position-left');
-        this.tooltipEl.classList.add('tooltip--position-right');
-        this.tooltipEl.style.left = ((ref.left + ref.width) - this.tooltipEl.offsetWidth) + 'px';
+        let origin = (ref.left + ref.width) - this.tooltipEl.offsetWidth;
+        console.log(origin);
+        if (origin < 0) {
+          // Align auto
+          this.tooltipEl.classList.remove('tooltip--position-left');
+          this.tooltipEl.classList.remove('tooltip--position-right');
+          this.tooltipEl.classList.add('tooltip--position-auto');
+          this.tooltipEl.style.left = ((ref.left + ref.width) - this.tooltipEl.offsetWidth) + 'px';
+        } else {
+          // Align right
+          this.tooltipEl.classList.remove('tooltip--position-left');
+          this.tooltipEl.classList.remove('tooltip--position-auto');
+          this.tooltipEl.classList.add('tooltip--position-right');
+          this.tooltipEl.style.left = ((ref.left + ref.width) - this.tooltipEl.offsetWidth) + 'px';
+        }
       }
       else {
         // Align left
         this.tooltipEl.classList.remove('tooltip--position-right');
+        this.tooltipEl.classList.remove('tooltip--position-auto');
         this.tooltipEl.classList.add('tooltip--position-left');
         this.tooltipEl.style.left = ref.left + 'px';
       }
@@ -67,6 +79,7 @@ namespace SomeNamespace.Vanilla.Core {
     }
 
     private create() {
+
       // Tooltip instance
       let tt = this;
 
@@ -101,6 +114,7 @@ namespace SomeNamespace.Vanilla.Core {
       window.addEventListener('click', function(event) {
         tt.onClickOutside(event);
       });
+
     }
 
     get isOpen(): boolean {
