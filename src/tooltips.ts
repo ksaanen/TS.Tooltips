@@ -8,7 +8,7 @@ namespace SomeNamespace.Vanilla.Core {
   }
 
   export class Tooltip {
-   
+
     private _isOpen: boolean;
     private _ref: HTMLElement;
     private _header: string;
@@ -26,8 +26,22 @@ namespace SomeNamespace.Vanilla.Core {
 
     setPosition() {
       let ref = this.ref.getBoundingClientRect();
-      this.tooltipEl.style.left = ref.left + 'px';
+
+      // Set top position
       this.tooltipEl.style.top = (ref.top + ref.height + 10) + 'px';
+
+      if (ref.left + ref.width + this.tooltipEl.offsetWidth > window.innerWidth) {
+        // Align right
+        this.tooltipEl.classList.remove('tooltip--position-left');
+        this.tooltipEl.classList.add('tooltip--position-right');
+        this.tooltipEl.style.left = ((ref.left + ref.width) - this.tooltipEl.offsetWidth) + 'px';
+      }
+      else {
+        // Align left
+        this.tooltipEl.classList.remove('tooltip--position-right');
+        this.tooltipEl.classList.add('tooltip--position-left');
+        this.tooltipEl.style.left = ref.left + 'px';
+      }
     }
 
     remove() {
@@ -44,7 +58,8 @@ namespace SomeNamespace.Vanilla.Core {
 
     private create() {
 
-      let t = this;
+      // Tooltip instance
+      let tt = this;
 
       // Generate the tooltip
       this.tooltipEl = document.createElement('div');
@@ -53,7 +68,7 @@ namespace SomeNamespace.Vanilla.Core {
       let closeBtn = document.createElement('div');
       closeBtn.className = 'tooltip--close';
       closeBtn.addEventListener('click', function() {
-        t.isOpen = false;
+        tt.isOpen = false;
       });
       this.tooltipEl.appendChild(closeBtn);
       
@@ -126,10 +141,6 @@ namespace SomeNamespace.Vanilla.Core {
     addTooltip(tooltip: TooltipInterface) {
       let t = new Tooltip(tooltip);
       this.tooltips.push(t);
-    }
-
-    closeOpenTooltip() {
-      this.getOpenTooltip().close();
     }
 
     private init() {
