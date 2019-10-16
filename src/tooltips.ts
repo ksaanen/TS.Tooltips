@@ -38,7 +38,6 @@ namespace SomeNamespace.Vanilla.Core {
 
       if (ref.left + ref.width + this.tooltipEl.offsetWidth > window.innerWidth) {
         let origin = (ref.left + ref.width) - this.tooltipEl.offsetWidth;
-        console.log(origin);
         if (origin < 0) {
           // Align auto
           this.togglePositionClass('auto');
@@ -69,7 +68,7 @@ namespace SomeNamespace.Vanilla.Core {
     }
 
     private onClickOutside(event: Event) {
-      console.log(event.target == (this.tooltipEl || this.tooltipEl.childNodes.length));
+      // TODO: clickoutside event listener
     }
 
     private togglePositionClass(position: 'left'|'right'|'auto'): void {
