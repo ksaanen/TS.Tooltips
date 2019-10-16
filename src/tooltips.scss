@@ -25,12 +25,8 @@
   }
 
   .tooltip--close {
-    display: block;
-    border-radius: 8px;
-    width: 16px;
-    height: 16px;
-    background: #DEDEDE;
     float: right;
+    position: relative;
   }
 
   &:before {
@@ -66,7 +62,7 @@
     width: auto;
     left: 15px !important;
     right: 15px !important;
-    
+
     &:before {
       display: none;
     }

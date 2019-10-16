@@ -74,8 +74,11 @@ namespace SomeNamespace.Vanilla.Core {
       this.tooltipEl = document.createElement('div');
       this.tooltipEl.className = 'tooltip';
 
+      let closeBtnSVG = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 535.771 535.747" enable-background="new 0 0 535.771 535.747" xml:space="preserve"><title>ClosePanel_grey</title><path fill="#4B4B4B" fill-opacity="0.4" d="M459.142,76.633c-103.6-103.6-273.221-101.949-378.824,3.685 c-105.634,105.604-107.285,275.21-3.686,378.795h0.016c103.6,103.601,273.191,101.95,378.811-3.685 C561.078,349.824,562.744,180.218,459.142,76.633z M367.14,335.367c8.65,8.649,8.576,22.739-0.266,31.581 c-8.813,8.842-22.842,9.063-31.609,0.295l-62.484-62.484l-63.707,63.707c-8.828,8.828-22.916,9.049-31.611,0.354 c-8.648-8.62-8.59-22.665,0.34-31.61l63.736-63.722l-62.484-62.484c-8.664-8.65-8.605-22.738,0.268-31.581 c8.797-8.842,22.826-9.063,31.58-0.294l62.484,62.483l63.723-63.707c8.813-8.827,22.916-9.033,31.609-0.339 c8.65,8.621,8.605,22.665-0.34,31.61l-63.707,63.708l-0.014-0.001L367.14,335.367z"/></svg>';
+
       let closeBtn = document.createElement('div');
       closeBtn.className = 'tooltip--close';
+      closeBtn.innerHTML = closeBtnSVG;
       closeBtn.addEventListener('click', function() {
         tt.isOpen = false;
       });
