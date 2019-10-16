@@ -14,7 +14,7 @@ namespace SomeNamespace.Vanilla.Core {
     private _header: string;
     private _content: string;
 
-    private tooltip: HTMLElement;
+    private tooltipEl: HTMLElement;
     
     constructor(tooltip: TooltipInterface) {
       this.ref = document.querySelector(tooltip.refElement);
@@ -26,13 +26,12 @@ namespace SomeNamespace.Vanilla.Core {
 
     setPosition() {
       let ref = this.ref.getBoundingClientRect();
-      this.tooltip.style.left = ref.left + 'px';
-      this.tooltip.style.top = (ref.top + ref.height + 10) + 'px';
+      this.tooltipEl.style.left = ref.left + 'px';
+      this.tooltipEl.style.top = (ref.top + ref.height + 10) + 'px';
     }
 
-    private close() {
-      this.tooltip.remove();
-      console.log(this.isOpen);
+    remove() {
+      this.tooltipEl.remove();
     }
 
     private onClick() {
@@ -43,23 +42,35 @@ namespace SomeNamespace.Vanilla.Core {
       }
     }
 
-    private open() {
-      let el = document.createElement('div');
-      el.className = 'tooltip';
-      let html = `<div class="tooltip--close" onclick="this.parentNode.remove()"></div>`;
+    private create() {
+
+      let t = this;
+
+      // Generate the tooltip
+      this.tooltipEl = document.createElement('div');
+      this.tooltipEl.className = 'tooltip';
+
+      let closeBtn = document.createElement('div');
+      closeBtn.className = 'tooltip--close';
+      closeBtn.addEventListener('click', function() {
+        t.isOpen = false;
+      });
+      this.tooltipEl.appendChild(closeBtn);
       
       if (this.header !== '') {
-        html += `<div class="tooltip--header">${this.header}</div>`;
+        let headerEl = document.createElement('div');
+        headerEl.className = 'tooltip--header';
+        headerEl.innerText = this.header;
+        this.tooltipEl.appendChild(headerEl);
       }
       if (this.content !== '') {
-        html += `<div class="tooltip--content">${this.content}</div>`;
+        let contentEl = document.createElement('div');
+        contentEl.className = 'tooltip--content';
+        contentEl.innerText = this.content;
+        this.tooltipEl.appendChild(contentEl);
       }
 
-      el.innerHTML = html;
-
-      // Generate tooltip
-      this.tooltip = el;
-      document.querySelector('body').appendChild(this.tooltip);
+      document.querySelector('body').appendChild(this.tooltipEl);
     }
 
     get isOpen(): boolean {
@@ -70,10 +81,10 @@ namespace SomeNamespace.Vanilla.Core {
       this._isOpen = bool;
 
       if (bool === true) {
-        this.open();
+        this.create();
       }
       else {
-        this.close();
+        this.remove();
       }
     }
 
@@ -115,6 +126,10 @@ namespace SomeNamespace.Vanilla.Core {
     addTooltip(tooltip: TooltipInterface) {
       let t = new Tooltip(tooltip);
       this.tooltips.push(t);
+    }
+
+    closeOpenTooltip() {
+      this.getOpenTooltip().close();
     }
 
     private init() {
