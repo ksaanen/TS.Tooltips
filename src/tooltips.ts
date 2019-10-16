@@ -63,7 +63,7 @@ namespace SomeNamespace.Vanilla.Core {
     }
 
     private onClickOutside(event: Event) {
-      console.log(event.target == (this.tooltipEl || this.tooltipEl.childNodes.item));
+      console.log(event.target == (this.tooltipEl || this.tooltipEl.childNodes.length));
     }
 
     private create() {

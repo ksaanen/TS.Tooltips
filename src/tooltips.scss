@@ -1,5 +1,6 @@
 .tooltip {
   max-width: 340px;
+  min-width: 170px;
   -webkit-box-shadow: 0 0 30px 0 rgba(0,0,0,.2);
   -moz-box-shadow: 0 0 30px 0 rgba(0,0,0,.2);
   box-shadow: 0 0 30px 0 rgba(0,0,0,.2);
@@ -57,4 +58,18 @@
     right: auto;
     left: 0;
   }
+}
+
+@media screen and (max-width: 320px) {
+
+  .tooltip {
+    width: auto;
+    left: 15px !important;
+    right: 15px !important;
+    
+    &:before {
+      display: none;
+    }
+  }
+
 }
