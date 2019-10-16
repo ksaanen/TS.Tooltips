@@ -41,32 +41,26 @@ namespace SomeNamespace.Vanilla.Core {
         console.log(origin);
         if (origin < 0) {
           // Align auto
-          this.tooltipEl.classList.remove('tooltip--position-left');
-          this.tooltipEl.classList.remove('tooltip--position-right');
-          this.tooltipEl.classList.add('tooltip--position-auto');
+          this.togglePositionClass('auto');
           this.tooltipEl.style.left = ((ref.left + ref.width) - this.tooltipEl.offsetWidth) + 'px';
         } else {
           // Align right
-          this.tooltipEl.classList.remove('tooltip--position-left');
-          this.tooltipEl.classList.remove('tooltip--position-auto');
-          this.tooltipEl.classList.add('tooltip--position-right');
+          this.togglePositionClass('right');
           this.tooltipEl.style.left = ((ref.left + ref.width) - this.tooltipEl.offsetWidth) + 'px';
         }
       }
       else {
         // Align left
-        this.tooltipEl.classList.remove('tooltip--position-right');
-        this.tooltipEl.classList.remove('tooltip--position-auto');
-        this.tooltipEl.classList.add('tooltip--position-left');
+        this.togglePositionClass('left');
         this.tooltipEl.style.left = ref.left + 'px';
       }
     }
 
-    remove() {
+    remove(): void {
       this.tooltipEl.remove();
     }
 
-    private onClick() {
+    private onClick(): void {
       // Set isOpen
       if (!this.isOpen) {
         this.isOpen = true;
@@ -78,7 +72,16 @@ namespace SomeNamespace.Vanilla.Core {
       console.log(event.target == (this.tooltipEl || this.tooltipEl.childNodes.length));
     }
 
-    private create() {
+    private togglePositionClass(position: 'left'|'right'|'auto'): void {
+      this.tooltipEl.classList.remove(
+        'tooltip--position-auto',
+        'tooltip--position-left',
+        'tooltip--position-right'
+        );
+      this.tooltipEl.classList.add('tooltip--position-' + position);
+    };
+
+    private create(): void {
 
       // Tooltip instance
       let tt = this;
@@ -148,7 +151,7 @@ namespace SomeNamespace.Vanilla.Core {
       this.tooltips.push(t);
     }
 
-    private init() {
+    private init(): void {
       // Add resize eventlistener to window
       window.addEventListener('resize', (e) => {
         this.onResize();
@@ -162,7 +165,7 @@ namespace SomeNamespace.Vanilla.Core {
       })[0];
     }
 
-    private onResize() {
+    private onResize(): void {
       // First check if a tooltip has opened.
       if (this.getOpenTooltip()) {
         this.getOpenTooltip().setPosition();
