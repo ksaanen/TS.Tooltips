@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc -w",
-    "build": "tsc -b",
-    "build-css": "node-sass --include-path scss src/tooltips.scss dist/tooltips.css"
+    "build": "npm run sass:build && tsc -b",
+    "sass:build": "node-sass src/tooltips.scss -o dist",
+    "sass:watch": "npm run sass:build && node-sass src/tooltips.scss -wo dist"
   },
   "author": "",
   "license": "ISC",
