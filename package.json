@@ -6,11 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc -w",
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "build-css": "node-sass --include-path scss src/tooltips.scss dist/tooltips.css"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "node-sass": "^4.12.0",
     "typescript": "^3.6.4"
   }
 }
