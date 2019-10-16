@@ -10,14 +10,20 @@ namespace SomeNamespace.Vanilla.Core {
   export class Tooltip {
 
     private _isOpen: boolean;
-    private _ref: HTMLElement;
-    private _header: string;
-    private _content: string;
 
+    private ref: HTMLElement;
+    private header: string;
+    private content: string;
     private tooltipEl: HTMLElement;
     
     constructor(tooltip: TooltipInterface) {
       this.ref = document.querySelector(tooltip.refElement);
+      if (tooltip.header) {
+        this.header = tooltip.header;
+      }
+      if (tooltip.content) {
+        this.content = tooltip.content;
+      }
 
       this.ref.onclick = () => {
         this.onClick();
@@ -56,8 +62,11 @@ namespace SomeNamespace.Vanilla.Core {
       }
     }
 
-    private create() {
+    private onClickOutside(event: Event) {
+      console.log(event.target == (this.tooltipEl || this.tooltipEl.childNodes.item));
+    }
 
+    private create() {
       // Tooltip instance
       let tt = this;
 
@@ -84,8 +93,11 @@ namespace SomeNamespace.Vanilla.Core {
         contentEl.innerText = this.content;
         this.tooltipEl.appendChild(contentEl);
       }
-
       document.querySelector('body').appendChild(this.tooltipEl);
+
+      window.addEventListener('click', function(event) {
+        tt.onClickOutside(event);
+      });
     }
 
     get isOpen(): boolean {
@@ -101,30 +113,6 @@ namespace SomeNamespace.Vanilla.Core {
       else {
         this.remove();
       }
-    }
-
-    get ref(): HTMLElement {
-      return this._ref;
-    }
-
-    set ref(el: HTMLElement) {
-      this._ref = el;
-    }
-
-    get header(): string {
-      return this._header;
-    }
-
-    set header(str: string) {
-      this._header = str;
-    }
-
-    get content(): string {
-      return this._content;
-    }
-
-    set content(str: string) {
-      this._content = str;
     }
 
   }
