@@ -56,7 +56,7 @@ namespace SomeNamespace.Vanilla.Core {
     }
 
     remove(): void {
-      this.tooltipEl.remove();
+      this.tooltipEl.parentNode.removeChild(this.tooltipEl);
     }
 
     private onClick(): void {
