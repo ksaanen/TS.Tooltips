@@ -117,10 +117,10 @@ namespace SomeNamespace.Vanilla.Core {
 
     // Close tooltip on click outside
     private onClickOutsideHandler() {
-      let tt = this;
+      let _tooltip = this;
       let handler = (event: Event) => {
-        if (event.target instanceof Node && !tt.tooltipEl.contains(event.target)) {
-          tt.isOpen = false;
+        if (event.target instanceof Node && !_tooltip.tooltipEl.contains(event.target)) {
+          _tooltip.isOpen = false;
           document.removeEventListener('click', handler);
         }
       }
