@@ -115,13 +115,16 @@ namespace SomeNamespace.Vanilla.Core {
 
     }
 
+    // Close tooltip on click outside
     private onClickOutsideHandler() {
-      document.addEventListener('click', (event) => {
-        // Close tooltip on click outside
-        if (event.target instanceof Node && !this.tooltipEl.contains(event.target)) {
-          this.isOpen = false;
+      let tt = this;
+      let handler = (event: Event) => {
+        if (event.target instanceof Node && !tt.tooltipEl.contains(event.target)) {
+          tt.isOpen = false;
+          document.removeEventListener('click', handler);
         }
-      });
+      }
+      document.addEventListener('click', handler);
     }
 
     get isOpen(): boolean {
