@@ -78,7 +78,7 @@ namespace SomeNamespace.Vanilla.Core {
 
     private create(): void {
       // Tooltip instance
-      let tt = this;
+      let _tooltip = this;
 
       // Generate the tooltip
       this.tooltipEl = document.createElement('div');
@@ -90,7 +90,7 @@ namespace SomeNamespace.Vanilla.Core {
       closeBtn.className = 'tooltip--close';
       closeBtn.innerHTML = closeBtnSVG;
       closeBtn.addEventListener('click', (event) => {
-        tt.isOpen = false;
+        _tooltip.isOpen = false;
       });
       this.tooltipEl.appendChild(closeBtn);
       
@@ -110,7 +110,7 @@ namespace SomeNamespace.Vanilla.Core {
       document.querySelector('body').appendChild(this.tooltipEl);
 
       setTimeout(function(){
-        tt.onClickOutsideHandler();
+        _tooltip.onClickOutsideHandler();
       }, 100);
 
     }
