@@ -97,7 +97,7 @@ export class Tooltip {
   private create = (): void => {
     // Generate the tooltip
     this.tooltipEl = document.createElement('div');
-    this.tooltipEl.className = 'tooltip-vanilla';
+    this.tooltipEl.className = 'tooltip';
     let _template = `
       <div class="tooltip--close">
         X
