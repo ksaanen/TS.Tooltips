@@ -1,8 +1,7 @@
 interface TooltipOptions {
-  header: string;
+  header?: string;
   content: string;
   refElement: string;
-  isOpen?: boolean;
 }
 
 interface RefPosition {
@@ -15,12 +14,13 @@ interface RefPosition {
 
 export class Tooltip {
 
-  private _isOpen: boolean;
-
   private ref: HTMLElement;
   private header: string;
   private content: string;
   private tooltipEl: HTMLElement;
+
+  private windowListener: EventListener;
+  private documentListener: EventListener;
 
   constructor(props: TooltipOptions) {
     this.ref = document.querySelector(props.refElement);
@@ -30,13 +30,10 @@ export class Tooltip {
     if (props.content) {
       this.content = props.content;
     }
-
-    this.ref.addEventListener('click', this.onClick);
-    this.create();
-    this.addEventListeners();
+    this.ref.addEventListener('click', this.onClick.bind(this));
   }
 
-  setPosition = (): void => {
+  setPosition(): void {
     let ref = this.getRefPosition(),
       sideOffset = 14,
       tooltipMaxWidth = 340;
@@ -61,7 +58,7 @@ export class Tooltip {
     }
   }
 
-  private getRefPosition = (): RefPosition => {
+  private getRefPosition(): RefPosition {
     let rect = this.ref.getBoundingClientRect(),
       scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
       scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -73,88 +70,73 @@ export class Tooltip {
       height: rect.height,
       width: rect.width
     }
-	}
+  }
+  
+  private isOpen() {
+    return document.body.contains(this.tooltipEl);
+  }
 
-  private remove = (): void => {
-    if (document.body.contains(this.tooltipEl)) {
+  private remove(): void {
+    if (this.isOpen()) {
       document.body.removeChild(this.tooltipEl);
+      this.removeEventListeners();
     }
   }
 
-  private onClick = (event: Event): void => {
-    // Set isOpen
-    if (!this.isOpen) {
-      this.isOpen = true;
-      this.setPosition();
+  private onClick(): void {
+    if (this.isOpen()) {
+      return;
     }
+    this.open();
   }
 
-  private togglePositionClass = (position: 'left'|'right'|'auto'): void => {
+  private togglePositionClass(position: 'left'|'right'|'auto'): void {
     this.tooltipEl.classList.remove('tooltip--position-auto', 'tooltip--position-left', 'tooltip--position-right');
     this.tooltipEl.classList.add('tooltip--position-' + position);
   };
 
-  private create = (): void => {
+  private create(): void {
     // Generate the tooltip
     this.tooltipEl = document.createElement('div');
     this.tooltipEl.className = 'tooltip';
     let _template = `
-      <div class="tooltip--close">
-        X
-      </div>
-      <div class="tooltip--header">${this.header}</div>
+      <div class="tooltip--close"></div>
+      ${this.header ? `<div class="tooltip--header">${this.header}</div>` : ''}
       <div class="tooltip--content">${this.content}</div>
     `;
     this.tooltipEl.innerHTML = _template;
+    // Append to body
+    document.body.appendChild(this.tooltipEl);
   }
 
-  private open = (): void => {
-    document.querySelector('body').appendChild(this.tooltipEl);
-
-    window.addEventListener('resize', (event) => {
-      this.onResize();
-    });
+  private open(): void {
+    this.create();
+    this.setPosition();
+    this.addEventListeners();
   }
 
-  private addEventListeners = (): void => {
+  private addEventListeners(): void {
     this.tooltipEl.querySelector('.tooltip--close').addEventListener('click', (event) => {
-      this.isOpen = false;
+      this.remove();
     });
-    
-    document.addEventListener('click', (event) => {
-      this.onClickOutsideHandler(event);
-    });
+    window.addEventListener('resize', this.windowListener = this.onResize.bind(this));
+    document.addEventListener('click', this.documentListener = this.onClickOutsideHandler.bind(this));
+  }
+
+  private removeEventListeners(): void {
+    window.removeEventListener('resize', this.windowListener);
+    document.removeEventListener('click', this.documentListener);
   }
 
   // Close tooltip on click outside
-  private onClickOutsideHandler = (event: Event) => {
+  private onClickOutsideHandler(event: Event) {
     if (event.target instanceof Node && !this.tooltipEl.contains(event.target) && !this.ref.contains(event.target)) {
-      this.isOpen = false;
-    }
-  }
-
-  private onResize = (): void => {
-    // First check if a tooltip has opened.
-    if (this.isOpen) {
-      this.setPosition();
-    }
-  }
-
-  get isOpen(): boolean {
-    return this._isOpen;
-  }
-
-  set isOpen(bool: boolean) {
-    this._isOpen = bool;
-
-    if (bool === true) {
-      this.open();
-    }
-    else {
       this.remove();
-      document.removeEventListener('click', this.onClickOutsideHandler);
-      window.removeEventListener('click', this.onResize);
     }
+  }
+
+  private onResize(): void {
+    this.setPosition();
   }
 
 }
